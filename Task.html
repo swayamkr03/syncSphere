@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Task Management System</h1>
+        <div class="input-container">
+            <input type="text" id="task-input" placeholder="Add a new task">
+            <button id="add-task-button">Add Task</button>
+        </div>
+        <ul id="task-list"></ul>
+        <div class="statistics">
+            <div class="pie-chart-container">
+                <canvas id="pie-chart"></canvas>
+            </div>
+            <div class="percentage">
+                <p id="completion-percentage"></p>
+            </div>
+        </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="task.js"></script>
+</body>
+</html>

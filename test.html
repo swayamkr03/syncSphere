@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="LogoWB.png" alt="Logo" width="40px">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#Home">Home</a></li>
+                <li><a href="#workspace">Workspace</a></li>
+                <li><a href="#helpdesk">HelpDesk</a></li>
+            </ul>
+        </nav>
+        <div class="user-options">
+            <!-- Updated Login button with anchor tag -->
+            <a href="login.html" class="login-button">Login</a>
+            <button id="user-menu-button">☰</button>
+            <div id="user-menu" class="user-menu">
+                <ul>
+                    <li><a href="#Profile">Profile</a></li>
+                    <li><a href="#Setting">Settings</a></li>
+                    <li><a href="#logout">Log Out</a></li>
+                    <li><a href="#About">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Rest of your content -->
+        <section class="welcome">
+            <h2>Hi, admin</h2>
+            <input type="text" placeholder="Search for something">
+        </section>
+
+        <section class="popular-topics">
+            <h3>Popular Topics</h3>
+            <div class="topics-grid">
+                <div class="topic-item">Sheet</div>
+                <div class="topic-item">Docs</div>
+                <div class="topic-item" id="google-slides-button">Slides</div>
+                <div class="topic-item">Forms</div>
+                <!-- Video Conferencing button -->
+                <div class="topic-item" id="video-conferencing-button">Video Conferencing</div>
+                <div class="topic-item">Live Chat</div>
+            </div>
+        </section>
+
+        <section class="active-items">
+            <h3>My Active Items</h3>
+            <div class="tasks">
+                <div class="task">9 Tasks</div>
+                <div class="task">4 Requests</div>
+                <div class="task">2 Purchases</div>
+                <div class="task">2 Plans</div>
+            </div>
+        </section>
+
+        <section class="quick-tasks">
+            <h3>Quick Tasks</h3>
+            <div class="quick-task overdue">
+                <p>Employee Approval - Dave Marsh</p>
+                <p>Due 25/12/22</p>
+                <button>Reject</button>
+                <button>Approve</button>
+            </div>
+            <div class="quick-task new">
+                <p>Yearly Corporate Training</p>
+                <p>Due 25/12/22</p>
+                <button>Watch</button>
+            </div>
+        </section>
+
+        <section class="recent-articles">
+            <h3>Recent Articles</h3>
+            <div class="articles-grid">
+                <div class="article">Create Reservation</div>
+                <div class="article">Appointments</div>
+                <div class="article">Get Help</div>
+            </div>
+        </section>
+
+        <!-- Video Conferencing Section -->
+        <section class="video-conferencing" id="video-conferencing" style="display:none;">
+            <h3>Video Conferencing</h3>
+            <div id="room-code"></div>
+            <div class="moderator-view">
+                <h4>Moderator View</h4>
+                <iframe
+                    allow="camera; microphone; fullscreen; speaker; display-capture"
+                    id="jitsi-iframe"
+                    style="width: 100%; height: 600px;">
+                </iframe>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-section">
+            <h4>Leadership</h4>
+            <p>History</p>
+            <p>Mission</p>
+            <p>Teams</p>
+        </div>
+        <div class="footer-section">
+            <h4>Marketing</h4>
+            <p>Media Million</p>
+            <p>Brand Blog</p>
+            <p>Contact me</p>
+        </div>
+        <div class="footer-section">
+            <h4>Diversity and Inclusion</h4>
+            <p>Pumps</p>
+            <p>Employee accounts</p>
+            <p>Events</p>
+        </div>
+    </footer>
+    <script src="scripts.js"></script>
+    <script>
+        // Check if user is logged in
+        if (localStorage.getItem('loggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        // Function to generate a random room code
+        function generateRoomCode() {
+            return 'room-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        document.getElementById('video-conferencing-button').addEventListener('click', function() {
+            var videoConferencingSection = document.getElementById('video-conferencing');
+            var roomCode = generateRoomCode();
+            var roomCodeDiv = document.getElementById('room-code');
+            var jitsiIframe = document.getElementById('jitsi-iframe');
+            
+            // Display the room code
+            roomCodeDiv.innerHTML = 'Room Code: ' + roomCode;
+
+            // Set the Jitsi Meet URL with the room code
+            jitsiIframe.src = 'https://meet.jit.si/' + roomCode;
+
+            // Show the video conferencing section
+            videoConferencingSection.style.display = 'block';
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var userMenuButton = document.getElementById('user-menu-button');
+            var userMenu = document.getElementById('user-menu');
+
+            userMenuButton.addEventListener('click', function () {
+                userMenu.style.display = userMenu.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Close the menu if clicked outside
+            document.addEventListener('click', function (event) {
+                if (!userMenu.contains(event.target) && event.target !== userMenuButton) {
+                    userMenu.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

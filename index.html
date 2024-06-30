@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+    <!-- Firepad -->
+    <script src="https://cdn.firebase.com/libs/firepad/1.5.10/firepad.min.js"></script>
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="LogoWB.png" alt="Logo" width="40px">
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#Home">Home</a></li>
+                <li><a href="#workspace">Workspace</a></li>
+                <li><a href="#helpdesk">HelpDesk</a></li>
+            </ul>
+        </nav>
+        <div class="user-options">
+            <div class="user-avatar">Login</div>
+            <button id="user-menu-button">☰</button>
+            <div id="user-menu" class="user-menu">
+                <ul>
+                    <li>Profile</li>
+                    <li>Settings</li>
+                    <li>Log Out</li>
+                    <li>About</li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <h2>Hi, admin</h2>
+            <input type="text" placeholder="Search for something">
+        </section>
+
+        <section class="popular-topics">
+            <h2>Popular Topics</h2>
+            <div class="topics-grid">
+                <div class="topic-item" id="sheet-button">Collaborative Coading Area</div>
+                <div class="topic-item" id="docs-button">Docs</div>
+                <div class="topic-item" id="forms-button">Online IDE/Compiler</div>
+                <div class="topic-item" id="video-conferencing-button">Video Conferencing</div>
+                <div class="topic-item">Live Chat</div>
+                <div class="topic-item" id="task-management-button">Task Management</div>
+                <div class="topic-item" id="version-control-button">Version Control</div>
+            </div>
+        </section>
+            
+        <section class="recent-articles">
+            <h3>Recent Articles</h3>
+            <div class="articles-grid">
+                <div class="article">Create Reservation</div>
+                <div class="article">Appointments</div>
+                <div class="article">Get Help</div>
+            </div>
+        </section>
+        
+        <section class="task-management" id="task-management" style="display: none;">
+            <h2>Task Management System</h2>
+            <div class="input-container">
+                <input type="text" id="task-input" placeholder="Add a new task">
+                <button id="add-task">Add Task</button>
+            </div>
+            <ul id="task-list"></ul>
+            <div class="statistics">
+                <div class="pie-chart-container">
+                    <canvas id="pie-chart"></canvas>
+                </div>
+                <div class="percentage">
+                    <p id="completion-percentage">Completion: 0%</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Conferencing Section -->
+        <section class="video-conferencing" id="video-conferencing" style="display:none;">
+            <h3>Video Conferencing</h3>
+            <div id="room-code"></div>
+            <div class="moderator-view">
+                <h4>Moderator View</h4>
+                <iframe
+                    allow="camera; microphone; fullscreen; speaker; display-capture"
+                    id="jitsi-iframe"
+                    style="width: 100%; height: 600px;">
+                </iframe>
+            </div>
+        </section>
+
+        <!-- IDE/Compiler Section -->
+        <section class="ide-section" id="ide-section" style="display:none;">
+            <h3>Online IDE/Compiler</h3>
+            <div class="compiler-buttons">
+                <button onclick="loadCompiler('python')">Python</button>
+                <button onclick="loadCompiler('java')">Java</button>
+                <button onclick="loadCompiler('cpp')">C++</button>
+                <button onclick="loadCompiler('c')">C</button>
+                <button onclick="loadCompiler('javascript')">JavaScript</button>
+                <button onclick="loadCompiler('html')">HTML</button>
+                <button onclick="loadCompiler('C#')">C#</button>
+                <button onclick="loadCompiler('go')">Go</button>
+                <button onclick="loadCompiler('kotlin')">Kotlin</button>
+            </div>
+            <iframe id="compiler-iframe" style="width: 100%; height: 600px; border: 0;" sandbox="allow-scripts allow-same-origin allow-modals"></iframe>
+        </section>
+
+        <!-- Collaborative Coding Section -->
+        <section class="collab-coding" id="collab-coding" style="display:none;">
+            <h3>Collaborative Coding Area</h3>
+            <button id="invite-button">Invite</button>
+            <div id="invite-link" style="margin-top: 10px;"></div>
+            <div id="firepad-container" style="width: 100%; height: 600px;"></div>
+        </section>
+
+        <!-- Live Chat Section -->
+        <section class="live-chat" id="live-chat" style="display:none;">
+            <h3>Live Chat</h3>
+            <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;"></div>
+            <input type="text" id="chat-input" placeholder="Type a message" style="width: 80%;">
+            <button id="send-button">Send</button>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-section">
+            <h4>Leadership</h4>
+            <p>History</p>
+            <p>Mission</p>
+            <p>Teams</p>
+        </div>
+        <div class="footer-section">
+            <h4>Marketing</h4>
+            <p>Media Million</p>
+            <p>Brand Blog</p>
+            <p>Contact me</p>
+        </div>
+        <div class="footer-section">
+            <h4>Diversity and Inclusion</h4>
+            <p>Pumps</p>
+            <p>Employee accounts</p>
+            <p>Events</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="scripts.js"></script>
+    <script>
+        // Firebase configuration
+        var firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Function to generate a random room code
+        function generateRoomCode() {
+            return 'room-' + Math.random().toString(36).substr(2, 9);
+        }
+
+        document.getElementById('video-conferencing-button').addEventListener('click', function() {
+            var videoConferencingSection = document.getElementById('video-conferencing');
+            var roomCode = generateRoomCode();
+            var roomCodeDiv = document.getElementById('room-code');
+            var jitsiIframe = document.getElementById('jitsi-iframe');
+            
+            // Display the room code
+            roomCodeDiv.innerHTML = 'Room Code: ' + roomCode;
+
+            // Set the Jitsi Meet URL with the room code
+            jitsiIframe.src = 'https://meet.jit.si/' + roomCode;
+
+            // Show the video conferencing section
+            videoConferencingSection.style.display = 'block';
+        });
+
+        // Show the IDE/Compiler section when Forms button is clicked
+        document.getElementById('forms-button').addEventListener('click', function() {
+            var ideSection = document.getElementById('ide-section');
+            ideSection.style.display = 'block';
+        });
+
+        // Show the Collaborative Coding section when the topic item is clicked
+        document.getElementById('sheet-button').addEventListener('click', function() {
+            var collabCodingSection = document.getElementById('collab-coding');
+            collabCodingSection.style.display = 'block';
+
+            var firepadRef = firebase.database().ref().child('firepad').push();
+            var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+                lineNumbers: true,
+                mode: 'javascript'
+            });
+            var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+                defaultText: '/* Start coding here... */'
+            });
+
+            // Generate invite link
+            var inviteButton = document.getElementById('invite-button');
+            inviteButton.addEventListener('click', function() {
+                var inviteLink = document.getElementById('invite-link');
+                var currentUrl = window.location.href.split('?')[0];
+                var inviteUrl = currentUrl + '?room=' + firepadRef.key;
+                inviteLink.innerHTML = '<p>Share this link to invite others:</p><p><a href="' + inviteUrl + '" target="_blank">' + inviteUrl + '</a></p>';
+            });
+        });
+
+        // Open Google Docs in a new tab when the Docs button is clicked
+        document.getElementById('docs-button').addEventListener('click', function() {
+            window.open('https://docs.google.com', '_blank');
+        });
+          
+        // Load compiler in iframe
+        function loadCompiler(language) {
+            var compilerIframe = document.getElementById('compiler-iframe');
+            switch(language) {
+                case 'python':
+                    compilerIframe.src = 'https://www.programiz.com/python-programming/online-compiler';
+                    break;
+                case 'java':
+                    compilerIframe.src = 'https://www.programiz.com/java-programming/online-compiler';
+                    break;
+                case 'cpp':
+                    compilerIframe.src = 'https://www.programiz.com/cpp-programming/online-compiler';
+                    break;
+                case 'c':
+                    compilerIframe.src = 'https://www.programiz.com/c-programming/online-compiler';
+                    break;
+                case 'javascript':
+                    compilerIframe.src = 'https://www.programiz.com/javascript/online-compiler';
+                    break;
+                case 'html':
+                    compilerIframe.src = 'https://www.programiz.com/html/online-compiler';
+                    break;
+                case 'C#':
+                    compilerIframe.src = 'https://www.programiz.com/csharp-programming/online-compiler';
+                    break;
+                case 'go':
+                    compilerIframe.src = 'https://www.programiz.com/go-programming/online-compiler';
+                    break;
+                case 'kotlin':
+                    compilerIframe.src = 'https://www.programiz.com/kotlin-programming/online-compiler';
+                    break;
+                default:
+                    compilerIframe.src = '';
+            }
+
+            // Hide the header section within the iframe
+            compilerIframe.onload = function() {
+                var iframeDoc = compilerIframe.contentDocument || compilerIframe.contentWindow.document;
+                var style = document.createElement('style');
+                style.innerHTML = ".header { display: none !important; }";
+                iframeDoc.head.appendChild(style);
+            }
+        }
+
+        // Check if there's a room parameter in the URL to join a specific room
+        window.onload = function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var room = urlParams.get('room');
+            if (room) {
+                var collabCodingSection = document.getElementById('collab-coding');
+                collabCodingSection.style.display = 'block';
+
+                var firepadRef = firebase.database().ref().child(room);
+                var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+                    lineNumbers: true,
+                    mode: 'javascript'
+                });
+                var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+                    defaultText: '/* Start coding here... */'
+                });
+            }
+        };
+
+        // Show the Live Chat section when Live Chat button is clicked
+        document.getElementById('live-chat-button').addEventListener('click', function() {
+            var liveChatSection = document.getElementById('live-chat');
+            liveChatSection.style.display = 'block';
+        });
+
+        // Live chat functionality
+        var chatBox = document.getElementById('chat-box');
+        var chatInput = document.getElementById('chat-input');
+        var sendButton = document.getElementById('send-button');
+
+        sendButton.addEventListener('click', function() {
+            var message = chatInput.value;
+            if (message.trim() !== '') {
+                var newMessageRef = firebase.database().ref('chat').push();
+                newMessageRef.set({
+                    message: message,
+                    timestamp: new Date().toISOString()
+                });
+                chatInput.value = '';
+            }
+        });
+
+        firebase.database().ref('chat').on('child_added', function(snapshot) {
+            var data = snapshot.val();
+            var messageElement = document.createElement('p');
+            messageElement.textContent = data.message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    </script>
+</body>
+</html>
